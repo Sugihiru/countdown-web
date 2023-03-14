@@ -1,13 +1,19 @@
-<script setup lang="ts">
-import WelcomeItem from './WelcomeItem.vue'
-import DocumentationIcon from './icons/IconDocumentation.vue'
-import ToolingIcon from './icons/IconTooling.vue'
-import EcosystemIcon from './icons/IconEcosystem.vue'
-import CommunityIcon from './icons/IconCommunity.vue'
-import SupportIcon from './icons/IconSupport.vue'
-</script>
-
 <template>
+  <el-form ref="formRef" :model="formData" :rules="formRules">
+    <h1>Create my countdown</h1>
+    <el-form-item prop="eventName">
+      <el-input v-model="formData.eventName" placeholder="Event name" />
+    </el-form-item>
+    <el-form-item prop="eventPreviewName">
+      <el-input v-model="formData.eventPreviewName" placeholder="Event preview name" />
+    </el-form-item>
+
+    <el-form-item>
+      <el-button type="primary" @click="onSubmitForm(formRef)">Create</el-button>
+      <el-button>Cancel</el-button>
+    </el-form-item>
+  </el-form>
+
   <WelcomeItem>
     <template #icon>
       <DocumentationIcon />
@@ -64,9 +70,8 @@ import SupportIcon from './icons/IconSupport.vue'
     Got stuck? Ask your question on
     <a href="https://chat.vuejs.org" target="_blank" rel="noopener">Vue Land</a>, our official
     Discord server, or
-    <a href="https://stackoverflow.com/questions/tagged/vue.js" target="_blank" rel="noopener"
-      >StackOverflow</a
-    >. You should also subscribe to
+    <a href="https://stackoverflow.com/questions/tagged/vue.js" target="_blank" rel="noopener">StackOverflow</a>. You
+    should also subscribe to
     <a href="https://news.vuejs.org" target="_blank" rel="noopener">our mailing list</a> and follow
     the official
     <a href="https://twitter.com/vuejs" target="_blank" rel="noopener">@vuejs</a>
@@ -84,3 +89,49 @@ import SupportIcon from './icons/IconSupport.vue'
     <a href="https://vuejs.org/sponsor/" target="_blank" rel="noopener">becoming a sponsor</a>.
   </WelcomeItem>
 </template>
+
+
+
+<script setup lang="ts">
+import { reactive, ref } from "vue"
+import type { FormInstance, FormRules } from 'element-plus'
+import WelcomeItem from './WelcomeItem.vue'
+import DocumentationIcon from './icons/IconDocumentation.vue'
+import ToolingIcon from './icons/IconTooling.vue'
+import EcosystemIcon from './icons/IconEcosystem.vue'
+import CommunityIcon from './icons/IconCommunity.vue'
+import SupportIcon from './icons/IconSupport.vue'
+
+const formRules = reactive<FormRules>({
+  eventName: [
+    { validator: validateIsNotWhitespaceEmpty, message: 'Mandatory field', trigger: 'blur' },
+  ],
+})
+
+const formRef = ref<FormInstance>()
+
+const formData = ref({
+  eventName: "",
+  eventPreviewName: "",
+})
+
+const onSubmitForm = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  await formEl.validate((valid) => {
+    if (valid) {
+      // Write into Firestore
+      // Get doc ID
+      // Redirect
+      console.log('submit!')
+    }
+  })
+}
+
+function validateIsNotWhitespaceEmpty(rules: unknown, value: string, callback: (err?: Error) => void) {
+  if (value.trim() === "") {
+    callback(new Error("Please provide a value"));
+    return;
+  }
+  callback();
+}
+</script>
