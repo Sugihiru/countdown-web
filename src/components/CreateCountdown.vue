@@ -101,6 +101,7 @@ import ToolingIcon from './icons/IconTooling.vue'
 import EcosystemIcon from './icons/IconEcosystem.vue'
 import CommunityIcon from './icons/IconCommunity.vue'
 import SupportIcon from './icons/IconSupport.vue'
+import { FirestoreDatabase } from "@/services/firestore_database"
 
 const formRules = reactive<FormRules>({
   eventName: [
@@ -119,7 +120,7 @@ const onSubmitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid) => {
     if (valid) {
-      // Write into Firestore
+      FirestoreDatabase.createCountdown(formData.value);
       // Get doc ID
       // Redirect
       console.log('submit!')
