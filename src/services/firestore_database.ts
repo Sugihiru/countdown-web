@@ -1,4 +1,5 @@
-import { getFirestore, collection, serverTimestamp, doc, setDoc } from 'firebase/firestore'
+import type { CountdownModel } from '@/models/countdown_model'
+import { getFirestore, collection, serverTimestamp, doc, setDoc, getDoc } from 'firebase/firestore'
 
 const FirestoreDatabase = {
   createCountdown: async function (countdownData: Record<string, unknown>): Promise<string> {
@@ -21,6 +22,22 @@ const FirestoreDatabase = {
       countdownId: docId
     })
     return docId
+  },
+
+  getCountdown: async function (countdownId: string): Promise<CountdownModel | null> {
+    const db = getFirestore()
+
+    let docId = `countdowns/${countdownId}`
+    if (import.meta.env.VITE_FIRESTORE_DB_BASE_PATH) {
+      docId = `${import.meta.env.VITE_FIRESTORE_DB_BASE_PATH}/${docId}`
+    }
+
+    return getDoc(doc(db, docId)).then((docSnapshot) => {
+      if (docSnapshot.data()) {
+        return docSnapshot.data() as CountdownModel
+      }
+      return null
+    })
   }
 }
 

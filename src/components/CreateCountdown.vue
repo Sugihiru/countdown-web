@@ -102,6 +102,9 @@ import EcosystemIcon from './icons/IconEcosystem.vue'
 import CommunityIcon from './icons/IconCommunity.vue'
 import SupportIcon from './icons/IconSupport.vue'
 import { FirestoreDatabase } from "@/services/firestore_database"
+import { useRouter } from "vue-router"
+
+const router = useRouter();
 
 const formRules = reactive<FormRules>({
   eventName: [
@@ -116,14 +119,15 @@ const formData = ref({
   eventPreviewName: "",
 })
 
+document.title = "Countdown";
+
 const onSubmitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid) => {
     if (valid) {
-      FirestoreDatabase.createCountdown(formData.value);
-      // Get doc ID
-      // Redirect
-      console.log('submit!')
+      FirestoreDatabase.createCountdown(formData.value).then((countdownId) => {
+        router.push(`/${countdownId}`)
+      })
     }
   })
 }
