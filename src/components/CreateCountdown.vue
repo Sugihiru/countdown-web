@@ -7,8 +7,8 @@
     <el-form-item prop="eventPreviewName">
       <el-input v-model="formData.eventPreviewName" placeholder="Event preview name (optional)" />
     </el-form-item>
-    <el-form-item prop="eventDatetime">
-      <el-date-picker v-model="formData.eventDatetime" type="datetime" placeholder="Event date" format="DD-MM-YYYY HH:mm"
+    <el-form-item prop="eventDate">
+      <el-date-picker v-model="formData.eventDate" type="datetime" placeholder="Event date" format="DD-MM-YYYY HH:mm"
         :disabled-date="isInvalidDate" />
     </el-form-item>
 
@@ -114,7 +114,7 @@ const formRules = reactive<FormRules>({
   eventName: [
     { validator: validateIsNotWhitespaceEmpty, trigger: 'blur' },
   ],
-  eventDatetime: [
+  eventDate: [
     { validator: validateEventDate, trigger: 'blur' },
   ],
 })
@@ -124,7 +124,7 @@ const formRef = ref<FormInstance>()
 const formData = ref({
   eventName: "",
   eventPreviewName: "",
-  eventDatetime: "",
+  eventDate: "",
 })
 
 document.title = "Countdown";

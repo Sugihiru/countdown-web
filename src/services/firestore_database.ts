@@ -33,8 +33,12 @@ const FirestoreDatabase = {
     }
 
     return getDoc(doc(db, docId)).then((docSnapshot) => {
-      if (docSnapshot.data()) {
-        return docSnapshot.data() as CountdownModel
+      const docData = docSnapshot.data()
+      if (docData) {
+        const countdown = docData as CountdownModel
+        // Converting explicitely Firestore's timestamp to Date
+        countdown.eventDate = docData.eventDate.toDate()
+        return countdown
       }
       return null
     })
