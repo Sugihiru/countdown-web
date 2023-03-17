@@ -5,7 +5,11 @@
       <el-input v-model="formData.eventName" placeholder="Event name" />
     </el-form-item>
     <el-form-item prop="eventPreviewName">
-      <el-input v-model="formData.eventPreviewName" placeholder="Event preview name" />
+      <el-input v-model="formData.eventPreviewName" placeholder="Event preview name (optional)" />
+    </el-form-item>
+    <el-form-item prop="eventDatetime">
+      <el-date-picker v-model="formData.eventDatetime" type="datetime" placeholder="Event date" format="DD-MM-YYYY HH:mm"
+        :disabled-date="isInvalidDate" />
     </el-form-item>
 
     <el-form-item>
@@ -108,7 +112,10 @@ const router = useRouter();
 
 const formRules = reactive<FormRules>({
   eventName: [
-    { validator: validateIsNotWhitespaceEmpty, message: 'Mandatory field', trigger: 'blur' },
+    { validator: validateIsNotWhitespaceEmpty, trigger: 'blur' },
+  ],
+  eventDatetime: [
+    { validator: validateEventDate, trigger: 'blur' },
   ],
 })
 
@@ -117,6 +124,7 @@ const formRef = ref<FormInstance>()
 const formData = ref({
   eventName: "",
   eventPreviewName: "",
+  eventDatetime: "",
 })
 
 document.title = "Countdown";
@@ -139,4 +147,18 @@ function validateIsNotWhitespaceEmpty(rules: unknown, value: string, callback: (
   }
   callback();
 }
+
+
+function validateEventDate(rules: unknown, eventDate: Date, callback: (err?: Error) => void) {
+  if (eventDate < new Date()) {
+    callback(new Error("Please provide a date in the future"));
+    return;
+  }
+  callback();
+}
+
+function isInvalidDate(eventDate: Date) {
+  return eventDate < new Date()
+}
+
 </script>
