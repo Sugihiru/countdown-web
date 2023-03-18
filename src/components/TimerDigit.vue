@@ -54,7 +54,7 @@ const rightDigit = computed(() => {
 }
 
 .title {
-    font-size: 12px;
+    font-size: 16px;
     margin-bottom: 5px;
 }
 
@@ -68,7 +68,7 @@ const rightDigit = computed(() => {
     position: relative;
     display: flex;
     flex: 0 1 25%;
-    font-size: 30px;
+    font-size: 42px;
     background-color: #404549;
     border-radius: 5px;
     padding: 10px 12px;

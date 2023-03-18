@@ -38,9 +38,9 @@ defineProps({
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 30px;
     width: 75%;
     margin: auto;
+    justify-content: center;
 }
 
 .separator-container {
