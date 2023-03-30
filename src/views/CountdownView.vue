@@ -53,7 +53,7 @@ const errorMessage = ref<string | null>(null);
 const countdown = ref<CountdownModel | null>(null);
 const backgroundImageUrl = ref<string | null | undefined>(null);
 
-let timer = useTimer(new Date());
+let timer = useTimer(new Date().getTime());
 
 const route = useRoute();
 const router = useRouter();
@@ -66,7 +66,7 @@ if (route.params.countdownId != null) {
       return router.push('/404');
     }
     document.title = `Countdown | ${countdownData.eventPreviewName ? countdownData.eventPreviewName : countdownData.eventName}`;
-    timer = useTimer(countdownData.eventDate);
+    timer = useTimer(countdownData.eventDate.getTime());
 
     if (countdownData.backgroundImagePath) {
       const backgroundImageRef = storageRef(storage, countdownData.backgroundImagePath)
