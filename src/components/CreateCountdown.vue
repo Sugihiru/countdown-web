@@ -1,6 +1,6 @@
 <template>
   <el-form class="form-content" ref="formRef" :model="formData" :rules="formRules">
-    <h1>Create my countdown</h1>
+    <h1 class="main-title">Create my countdown</h1>
     <el-form-item prop="eventName">
       <el-input v-model="formData.eventName" placeholder="Event name" />
     </el-form-item>
@@ -24,6 +24,11 @@
   padding-left: 5vw;
   padding-right: 5vw;
   width: 100vw;
+}
+
+.main-title {
+  padding-top: 50px;
+  padding-bottom: 50px;
 }
 </style>
 
