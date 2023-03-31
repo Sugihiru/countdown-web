@@ -12,8 +12,7 @@
         :disabled-date="isInvalidDate" />
     </el-form-item>
     <el-form-item label="Cover picture (optional)">
-      <el-upload class="avatar-uploader" action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-        :show-file-list="false" :on-success="handleImageUpload" :before-upload="beforeImageUpload">
+      <el-upload class="avatar-uploader" :show-file-list="false" :auto-upload="false" :on-change="onImageUploaded">
         <img v-if="imageUrl" :src="imageUrl" class="avatar" alt="Cover image" />
         <el-icon v-else class="avatar-uploader-icon">
           <Plus />
@@ -73,8 +72,8 @@
 
 <script setup lang="ts">
 import { reactive, ref } from "vue"
-import { ElMessage } from 'element-plus'
-import type { FormInstance, FormRules, UploadProps } from 'element-plus'
+import { ElMessage, type UploadFile, type UploadFiles } from 'element-plus'
+import type { FormInstance, FormRules } from 'element-plus'
 import { FirestoreDatabase } from "@/services/firestore_database"
 import { StorageService } from "@/services/storage"
 import { useRouter } from "vue-router"
@@ -102,15 +101,14 @@ const formData = ref({
 const imageUrl = ref<string>("");
 const coverImage = ref<Blob>()
 
-const handleImageUpload: UploadProps['onSuccess'] = (
-  response,
-  uploadFile
-) => {
-  coverImage.value = uploadFile.raw!
-  imageUrl.value = URL.createObjectURL(uploadFile.raw!)
-}
+const onImageUploaded = (uploadFile: UploadFile, _uploadFiles: UploadFiles) => {
+  if (!uploadFile.raw) {
+    ElMessage.error('No file provided')
+    return false
+  }
 
-const beforeImageUpload: UploadProps['beforeUpload'] = (rawFile) => {
+  const rawFile = uploadFile.raw;
+
   if (rawFile.type !== 'image/jpeg') {
     ElMessage.error('Cover picture must be in JPG format')
     return false
@@ -118,6 +116,8 @@ const beforeImageUpload: UploadProps['beforeUpload'] = (rawFile) => {
     ElMessage.error('Cover picture size can not exceed 10MB')
     return false
   }
+  coverImage.value = rawFile
+  imageUrl.value = URL.createObjectURL(rawFile)
   return true
 }
 
@@ -136,7 +136,7 @@ const onSubmitForm = async (formEl: FormInstance | undefined) => {
   })
 }
 
-function validateIsNotWhitespaceEmpty(rules: unknown, value: string, callback: (err?: Error) => void) {
+function validateIsNotWhitespaceEmpty(_rules: unknown, value: string, callback: (err?: Error) => void) {
   if (value.trim() === "") {
     callback(new Error("Please provide a value"));
     return;
@@ -145,7 +145,7 @@ function validateIsNotWhitespaceEmpty(rules: unknown, value: string, callback: (
 }
 
 
-function validateEventDate(rules: unknown, eventDate: Date, callback: (err?: Error) => void) {
+function validateEventDate(_rules: unknown, eventDate: Date, callback: (err?: Error) => void) {
   if (eventDate < new Date()) {
     callback(new Error("Please provide a date in the future"));
     return;
