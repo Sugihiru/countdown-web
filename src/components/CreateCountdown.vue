@@ -2,16 +2,16 @@
   <el-form class="form-content" ref="formRef" :model="formData" :rules="formRules" label-position="top">
     <h1 class="main-title">Create my countdown</h1>
     <el-form-item prop="eventName">
-      <el-input v-model="formData.eventName" placeholder="Event name" />
+      <el-input class="form-input" v-model="formData.eventName" placeholder="Event name" />
     </el-form-item>
     <el-form-item prop="eventPreviewName">
-      <el-input v-model="formData.eventPreviewName" placeholder="Event preview name (optional)" />
+      <el-input class="form-input" v-model="formData.eventPreviewName" placeholder="Event preview name (optional)" />
     </el-form-item>
     <el-form-item prop="eventDate">
-      <el-date-picker v-model="formData.eventDate" type="datetime" placeholder="Event date" format="DD-MM-YYYY HH:mm"
-        :disabled-date="isInvalidDate" />
+      <el-date-picker class="form-input" v-model="formData.eventDate" type="datetime" placeholder="Event date"
+        format="DD-MM-YYYY HH:mm" :disabled-date="isInvalidDate" />
     </el-form-item>
-    <el-form-item label="Cover picture (optional)">
+    <el-form-item label="Cover picture (optional)" class="form-element-with-label">
       <el-upload class="avatar-uploader" :show-file-list="false" :auto-upload="false" :on-change="onImageUploaded">
         <img v-if="imageUrl" :src="imageUrl" class="avatar" alt="Cover image" />
         <el-icon v-else class="avatar-uploader-icon">
@@ -66,6 +66,17 @@
   width: 150px;
   height: 150px;
   text-align: center;
+}
+
+.form-input {
+  --el-fill-color-blank: var(--color-input_background);
+  --el-border-color: var(--color-border);
+  --el-border-color-hover: var(--color-border-hover);
+  --el-text-color-regular: var(--color-text);
+}
+
+.form-element-with-label {
+  --el-text-color-regular: var(--color-text);
 }
 </style>
 
