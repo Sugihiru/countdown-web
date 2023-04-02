@@ -120,8 +120,8 @@ const onImageUploaded = (uploadFile: UploadFile, _uploadFiles: UploadFiles) => {
 
   const rawFile = uploadFile.raw;
 
-  if (rawFile.type !== 'image/jpeg') {
-    ElMessage.error('Cover picture must be in JPG format')
+  if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
+    ElMessage.error('Cover picture must be in JPG or PNG format')
     return false
   } else if (rawFile.size / 1024 / 1024 > 10) {
     ElMessage.error('Cover picture size can not exceed 10MB')
